@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
+plugins {
+    id 'java'
+    id("com.github.johnrengelman.shadow") version "6.0.0"
+}
+
+group 'com.batiaev.md.keepr'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.batiaev.md.keepr.KeeprApp"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+dependencies {
+    implementation 'org.fintecy.md:oxr-client:1.0.2'
+    implementation 'org.fintecy.md:cbr-client:1.0.1'
+    implementation 'org.fintecy.md:ecb-client:1.0.1'
+    implementation 'org.fintecy.md:revolut-client:1.0.1'
+    implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+wrapper {
+    gradleVersion = '7.4.2'
+}
